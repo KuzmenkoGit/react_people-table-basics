@@ -16,9 +16,9 @@ function fillByParents(persons: Person[]): Person[] {
 
 export default function PeoplePage() {
   const [persons, setPersons] = useState<Person[]>([]);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
 
-  const [isError, setIsError] = useState(true);
+  const [isError, setIsError] = useState(false);
 
   useEffect(() => {
     getPeople()
@@ -42,22 +42,14 @@ export default function PeoplePage() {
         <div className="box table-container">
           {loading ? (
             <Loader />
+          ) : isError ? (
+            <p data-cy="peopleLoadingError" className="has-text-danger">
+              Something went wrong
+            </p>
+          ) : persons.length === 0 ? (
+            <p data-cy="noPeopleMessage">There are no people on the server</p>
           ) : (
-            <>
-              {isError && (
-                <p data-cy="peopleLoadingError" className="has-text-danger">
-                  Something went wrong
-                </p>
-              )}
-
-              {persons.length === 0 ? (
-                <p data-cy="noPeopleMessage">
-                  There are no people on the server
-                </p>
-              ) : (
-                <PeopleTable persons={persons} />
-              )}
-            </>
+            <PeopleTable persons={persons} />
           )}
         </div>
       </div>
